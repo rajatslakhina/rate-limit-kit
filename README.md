@@ -41,4 +41,8 @@ The naive version of "handle rate limiting" is a retry loop with a fixed delay. 
 
 **Verification tier, stated honestly:** this run's sandbox had no headless Swift toolchain reachable — two separate attempts this run (one full download, one quick speed probe) both showed download speeds far too slow (roughly 50KB/s–1MB/s) to fetch a full toolchain within this run's time budget, and background downloads don't survive between shell calls in this environment. In place of `swift build`/`swift test`, every source and test file was checked with a scripted brace/paren/bracket balance pass (all files balanced) and a scripted scan for unguarded force-unwraps (none found). The test suite was written to the same standard as if `swift test` were about to run it — this is an honest statement of what didn't get automated confirmation this run, not a claim that it did.
 
-Demo app: (added after the companion repo is pushed — see below.)
+## Demo app
+
+[`rate-limit-kit-demo-app`](https://github.com/rajatslakhina/rate-limit-kit-demo-app) — a separate `Demo.xcodeproj` that consumes this package via a **remote** `XCRemoteSwiftPackageReference` (branch `main`), not a local path, exactly like any real external consumer would. Send single requests or a burst of concurrent duplicates against a simulated flaky backend and watch token-bucket throttling, coalescing, and bounded-queue backpressure resolve live.
+
+Honest status: a live Simulator run was actually attempted this time (this build was made in an interactive session, not an unattended one), but the very first screenshot showed Xcode already had unrelated real work open and running — so the attempt was correctly aborted before any click, per this pipeline's own safety rule about not interfering with other work on the same machine. See that repo's README for the full disclosure and what verification was done in its place.
